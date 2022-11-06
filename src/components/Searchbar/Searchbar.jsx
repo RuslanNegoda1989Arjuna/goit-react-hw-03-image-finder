@@ -1,9 +1,10 @@
+import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import { ButtonSubmit, FormSearch, Header, Input } from './Searchbar.styled';
 import { FiSearch } from 'react-icons/fi';
 
 const initialValues = {
-  searchvalue: '',
+  value: '',
 };
 export const Searchbar = ({ onSubmit }) => {
   const searchSubmit = (values, { resetForm }) => {
@@ -22,7 +23,7 @@ export const Searchbar = ({ onSubmit }) => {
 
           <Input
             type="text"
-            name="searchvalue"
+            name="value"
             autoComplete="off"
             autoFocus
             placeholder="Search images and photos"
@@ -31,4 +32,8 @@ export const Searchbar = ({ onSubmit }) => {
       </Header>
     </Formik>
   );
+};
+
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func,
 };
