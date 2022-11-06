@@ -6,14 +6,17 @@ export class App extends Component {
     search: '',
   };
 
+  addContact = searchvalue => {
+    const { search } = this.state;
+
+    this.setState({ search: searchvalue });
+  };
+
   render() {
     return (
-      <div>
-        <Div>
-          <h1> Start working</h1>
-          <Searchbar onSubmit={'hello'} />
-        </Div>
-      </div>
+      <Div>
+        <Searchbar onSubmit={this.addContact} />
+      </Div>
     );
   }
 }

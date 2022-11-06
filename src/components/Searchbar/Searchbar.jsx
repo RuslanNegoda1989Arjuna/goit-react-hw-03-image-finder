@@ -11,25 +11,21 @@ export const Searchbar = ({ onSubmit }) => {
     resetForm();
   };
   return (
-    <div>
-      <Formik initialValues={initialValues} onSubmit={searchSubmit}>
-        <Searchbar>
-          <Form>
-            <button type="submit" class="button">
-              <span class="button-label">Search</span>
-            </button>
+    <Formik initialValues={initialValues} onSubmit={searchSubmit}>
+      <Form>
+        <button type="submit" class="button">
+          <span class="button-label">Search</span>
+        </button>
 
-            <Field
-              // class="input"
-              type="text"
-              name="searchvalue"
-              autocomplete="off"
-              autofocus
-              placeholder="Search images and photos"
-            />
-          </Form>
-        </Searchbar>
-      </Formik>
-    </div>
+        <Field
+          // class="input"
+          type="text"
+          name="searchvalue"
+          autocomplete="off"
+          autofocus
+          placeholder="Search images and photos"
+        />
+      </Form>
+    </Formik>
   );
 };
