@@ -13,12 +13,7 @@ export const Searchbar = ({ onSubmit }) => {
   return (
     <Formik initialValues={initialValues} onSubmit={searchSubmit}>
       <Form>
-        <button type="submit" class="button">
-          <span class="button-label">Search</span>
-        </button>
-
         <Field
-          // class="input"
           type="text"
           name="searchvalue"
           autocomplete="off"
@@ -29,3 +24,20 @@ export const Searchbar = ({ onSubmit }) => {
     </Formik>
   );
 };
+
+//  <Formik initialValues={initialValues} onSubmit={searchSubmit}>
+//       <Form>
+//         <button type="submit" class="button">
+//           <span class="button-label">Search</span>
+//         </button>
+
+//         <Field
+//           // class="input"
+//           type="text"
+//           name="searchvalue"
+//           autocomplete="off"
+//           autofocus
+//           placeholder="Search images and photos"
+//         />
+//       </Form>
+//     </Formik>
