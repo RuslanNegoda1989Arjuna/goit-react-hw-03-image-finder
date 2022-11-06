@@ -1,43 +1,34 @@
-import { Formik, Form, Field } from 'formik';
-import { Searchbar } from './Searchbar.styled';
+import { Formik } from 'formik';
+import { ButtonSubmit, FormSearch, Header, Input } from './Searchbar.styled';
+import { FiSearch } from 'react-icons/fi';
 
 const initialValues = {
   searchvalue: '',
 };
 export const Searchbar = ({ onSubmit }) => {
   const searchSubmit = (values, { resetForm }) => {
-    console.log(values);
     onSubmit(values);
     resetForm();
   };
   return (
     <Formik initialValues={initialValues} onSubmit={searchSubmit}>
-      <Form>
-        <Field
-          type="text"
-          name="searchvalue"
-          autocomplete="off"
-          autofocus
-          placeholder="Search images and photos"
-        />
-      </Form>
+      <Header>
+        <FormSearch>
+          <ButtonSubmit type="submit">
+            <span>
+              <FiSearch size={20} />
+            </span>
+          </ButtonSubmit>
+
+          <Input
+            type="text"
+            name="searchvalue"
+            autoComplete="off"
+            autoFocus
+            placeholder="Search images and photos"
+          />
+        </FormSearch>
+      </Header>
     </Formik>
   );
 };
-
-//  <Formik initialValues={initialValues} onSubmit={searchSubmit}>
-//       <Form>
-//         <button type="submit" class="button">
-//           <span class="button-label">Search</span>
-//         </button>
-
-//         <Field
-//           // class="input"
-//           type="text"
-//           name="searchvalue"
-//           autocomplete="off"
-//           autofocus
-//           placeholder="Search images and photos"
-//         />
-//       </Form>
-//     </Formik>
