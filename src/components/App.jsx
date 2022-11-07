@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { Div } from './App.styled';
+// import { LoadeMore } from './Button/Button';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Searchbar } from './Searchbar/Searchbar';
 

@@ -1,11 +1,15 @@
 import axios from 'axios';
+import { LoadeMore } from 'components/Button/Button';
 import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
+import { Spiner } from 'components/Loader/Loader';
 import { Component } from 'react';
 import { Gallery } from './ImageGallery.styled';
 
 export class ImageGallery extends Component {
   state = {
+    page: 1,
     gallery: [],
+    isLoading: false,
   };
 
   async getPictures() {
@@ -19,7 +23,7 @@ export class ImageGallery extends Component {
         orientation: 'horizontal',
         safesearch: true,
         per_page: 12,
-        page: 1,
+        page: `${this.state.page}`,
       },
     };
 
@@ -29,23 +33,47 @@ export class ImageGallery extends Component {
     return data;
   }
 
+  loadMore = () => {
+    this.setState(prevState => ({
+      page: prevState.page + 1,
+    }));
+  };
+
   componentDidUpdate(prevProps, prevState) {
     // Умова чи змінились пропси, щоб не було зацикленості
     if (prevProps.searchValue !== this.props.searchValue) {
-      this.getPictures().then(data => {
-        this.setState({ gallery: data.hits });
-      });
+      this.setState({ page: 1, gallery: [] });
+    }
+
+    if (
+      prevProps.searchValue !== this.props.searchValue ||
+      prevState.page !== this.state.page
+    ) {
+      this.setState({ isLoading: true });
+      this.getPictures()
+        .then(data => {
+          this.setState(prevState => {
+            return { gallery: prevState.gallery.concat(data.hits) };
+          });
+        })
+        .finally(() => this.setState({ isLoading: false }));
     }
   }
 
   render() {
     const { gallery } = this.state;
     return (
-      <Gallery>
-        {gallery.map(({ id, webformatURL }) => {
-          return <ImageGalleryItem key={id} smallImg={webformatURL} id={id} />;
-        })}
-      </Gallery>
+      <>
+        {this.state.isLoading && <Spiner />}
+        <Gallery>
+          {gallery.map(({ id, webformatURL }) => {
+            return (
+              <ImageGalleryItem key={id} smallImg={webformatURL} id={id} />
+            );
+          })}
+        </Gallery>
+        <LoadeMore onClick={this.loadMore} />
+      </>
     );
   }
 }
