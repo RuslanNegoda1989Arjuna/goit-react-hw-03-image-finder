@@ -29,7 +29,6 @@ export class App extends Component {
     // перевірка чи змінився пошук і чи змінилась сторінка, якщо щось змінилось фетчим
     if (prevSearch !== search || prevPage !== page) {
       try {
-        debugger;
         this.setState({ isLoading: true });
 
         const data = fetchPictures(search, page);
