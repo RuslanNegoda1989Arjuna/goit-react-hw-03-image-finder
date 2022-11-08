@@ -1,4 +1,6 @@
 import { Component } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import fetchPictures from './Api/Api';
 import { Div } from './App.styled';
 import { LoadeMore } from './Button/Button';
@@ -18,7 +20,6 @@ export class App extends Component {
   componentDidUpdate(_, prevState) {
     const prevSearch = prevState.search;
     const prevPage = prevState.page;
-    console.log('1', this.state.isLoading);
 
     const { search, gallery, page } = this.state;
 
@@ -27,20 +28,27 @@ export class App extends Component {
       try {
         this.setState({ isLoading: true });
 
-        console.log('2', this.state.isLoading);
-
         const data = fetchPictures(search, page);
-
-        console.log(data);
         data.then(data => {
+          // Перевіряємо чи щось знайшли, якщо ні то повідомляємо
+          if (data.hits.length === 0) {
+            toast.error('Nothing is found !', {
+              position: toast.POSITION.TOP_LEFT,
+            });
+          }
+          console.log('Кількість', data.hits.length);
+          console.log('Загальна кількість', data.hits);
+          console.log('Загальна кількість data', data.total);
+          console.log('Загальна кількість галереї', gallery.length);
+
           this.setState(prevState => {
             return { gallery: prevState.gallery.concat(data.hits) };
           });
         });
       } catch (error) {
-        this.setState({ error });
+        this.setState({ error, isLoading: false });
       } finally {
-        this.setState({ isLoading: false });
+        this.setState({ isLoading: true });
       }
     }
   }
@@ -54,18 +62,28 @@ export class App extends Component {
 
   // отримуємо значення з інпут форми пошуку
   onSearchValue = value => {
-    this.setState({ search: value.value, page: 1, gallery: [] });
+    if (value.value === '') {
+      return toast.warn('Enter a word for search');
+    } else if (value.value === this.state.search) {
+      return;
+    }
+
+    this.setState({
+      search: value.value,
+      page: 1,
+      gallery: [],
+    });
   };
 
   render() {
-    const { search, gallery, isLoading } = this.state;
+    const { gallery, isLoading } = this.state;
     return (
       <Div>
         <Searchbar onSubmit={this.onSearchValue} />
         {isLoading && <Spiner />}
         <ImageGallery gallery={gallery} />
-        {this.state.isLoading && <Spiner />}
-        {gallery.length >= 12 && <LoadeMore onClick={this.loadMore} />}
+        <ToastContainer autoClose={2500} position="top-left" theme="colored" />
+        {gallery.length >= 12 && <LoadeMore loadMore={this.loadMore} />}
       </Div>
     );
   }
