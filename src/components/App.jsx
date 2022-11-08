@@ -2,10 +2,10 @@ import { Component } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import fetchPictures from './Api/Api';
-import { Div } from './App.styled';
 import { LoadeMore } from './Button/Button';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Spiner } from './Loader/Loader';
+import Modal from './Modal/Modal';
 import { Searchbar } from './Searchbar/Searchbar';
 
 export class App extends Component {
@@ -15,13 +15,15 @@ export class App extends Component {
     gallery: [],
     isLoading: false,
     error: null,
+    largeImage: '',
+    showModal: false,
   };
 
   componentDidUpdate(_, prevState) {
     const prevSearch = prevState.search;
     const prevPage = prevState.page;
 
-    const { search, gallery, page } = this.state;
+    const { search, page } = this.state;
 
     // перевірка чи змінився пошук і чи змінилась сторінка, якщо щось змінилось фетчим
     if (prevSearch !== search || prevPage !== page) {
@@ -36,19 +38,15 @@ export class App extends Component {
               position: toast.POSITION.TOP_LEFT,
             });
           }
-          console.log('Кількість', data.hits.length);
-          console.log('Загальна кількість', data.hits);
-          console.log('Загальна кількість data', data.total);
-          console.log('Загальна кількість галереї', gallery.length);
 
           this.setState(prevState => {
             return { gallery: prevState.gallery.concat(data.hits) };
           });
         });
       } catch (error) {
-        this.setState({ error, isLoading: false });
+        this.setState({ error });
       } finally {
-        this.setState({ isLoading: true });
+        this.setState({ isLoading: false });
       }
     }
   }
@@ -75,16 +73,34 @@ export class App extends Component {
     });
   };
 
+  // Modall
+  openModal = index => {
+    this.setState(({ gallery }) => ({
+      showModal: true,
+      largeImage: gallery[index].largeImageURL,
+    }));
+  };
+
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({ showModal: !showModal }));
+  };
+
   render() {
-    const { gallery, isLoading } = this.state;
+    const { toggleModal, openModal } = this;
+    const { gallery, isLoading, showModal, largeImage } = this.state;
     return (
-      <Div>
+      <>
         <Searchbar onSubmit={this.onSearchValue} />
         {isLoading && <Spiner />}
-        <ImageGallery gallery={gallery} />
+        <ImageGallery gallery={gallery} openModal={openModal} />
+
+        {showModal && (
+          <Modal toggleModal={toggleModal} largeImage={largeImage} />
+        )}
+
         <ToastContainer autoClose={2500} position="top-left" theme="colored" />
         {gallery.length >= 12 && <LoadeMore loadMore={this.loadMore} />}
-      </Div>
+      </>
     );
   }
 }
