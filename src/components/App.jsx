@@ -2,6 +2,7 @@ import { Component } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import fetchPictures from './Api/Api';
+import { Div } from './App.styled';
 import { LoadeMore } from './Button/Button';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Spiner } from './Loader/Loader';
@@ -28,6 +29,7 @@ export class App extends Component {
     // перевірка чи змінився пошук і чи змінилась сторінка, якщо щось змінилось фетчим
     if (prevSearch !== search || prevPage !== page) {
       try {
+        debugger;
         this.setState({ isLoading: true });
 
         const data = fetchPictures(search, page);
@@ -90,16 +92,20 @@ export class App extends Component {
     const { gallery, isLoading, showModal, largeImage } = this.state;
     return (
       <>
-        <Searchbar onSubmit={this.onSearchValue} />
-        {isLoading && <Spiner />}
-        <ImageGallery gallery={gallery} openModal={openModal} />
-
-        {showModal && (
-          <Modal toggleModal={toggleModal} largeImage={largeImage} />
-        )}
-
-        <ToastContainer autoClose={2500} position="top-left" theme="colored" />
-        {gallery.length >= 12 && <LoadeMore loadMore={this.loadMore} />}
+        <Div>
+          <Searchbar onSubmit={this.onSearchValue} />
+          {isLoading && <Spiner />}
+          <ImageGallery gallery={gallery} openModal={openModal} />
+          {showModal && (
+            <Modal toggleModal={toggleModal} largeImage={largeImage} />
+          )}
+          <ToastContainer
+            autoClose={2500}
+            position="top-left"
+            theme="colored"
+          />
+          {gallery.length >= 12 && <LoadeMore loadMore={this.loadMore} />}
+        </Div>
       </>
     );
   }
