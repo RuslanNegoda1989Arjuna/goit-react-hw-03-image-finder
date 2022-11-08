@@ -15,17 +15,20 @@ export class App extends Component {
     error: null,
   };
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(_, prevState) {
     const prevSearch = prevState.search;
     const prevPage = prevState.page;
+    console.log('1', this.state.isLoading);
 
     const { search, gallery, page } = this.state;
 
     // перевірка чи змінився пошук і чи змінилась сторінка, якщо щось змінилось фетчим
     if (prevSearch !== search || prevPage !== page) {
-      this.setState({ isLoading: true });
-
       try {
+        this.setState({ isLoading: true });
+
+        console.log('2', this.state.isLoading);
+
         const data = fetchPictures(search, page);
 
         console.log(data);
@@ -55,10 +58,11 @@ export class App extends Component {
   };
 
   render() {
-    const { search, gallery } = this.state;
+    const { search, gallery, isLoading } = this.state;
     return (
       <Div>
         <Searchbar onSubmit={this.onSearchValue} />
+        {isLoading && <Spiner />}
         <ImageGallery gallery={gallery} />
         {this.state.isLoading && <Spiner />}
         {gallery.length >= 12 && <LoadeMore onClick={this.loadMore} />}
