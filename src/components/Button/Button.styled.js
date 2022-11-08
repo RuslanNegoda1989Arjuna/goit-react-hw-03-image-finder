@@ -10,7 +10,6 @@ export const BtnLoad = styled.button`
   margin-right: auto;
   margin-left: auto;
   margin-bottom: 16px;
-  margin-top: 16px;
   color: #fff;
   border: 0;
   text-decoration: none;
