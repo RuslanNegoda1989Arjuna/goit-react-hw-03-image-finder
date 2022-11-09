@@ -18,5 +18,4 @@ export const ImageGallery = ({ gallery, openModal }) => {
       </Gallery>
     </>
   );
-  // }
 };

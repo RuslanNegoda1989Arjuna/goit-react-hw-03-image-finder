@@ -18,6 +18,7 @@ export class App extends Component {
     error: null,
     largeImage: '',
     showModal: false,
+    showLoadMore: false,
   };
 
   componentDidUpdate(_, prevState) {
@@ -40,6 +41,11 @@ export class App extends Component {
             });
           }
 
+          // Логіка відображення кнопки "Завантажити ще.."
+          const show = Math.ceil(data.total / 12);
+          this.setState({ showLoadMore: page < show ? true : false });
+
+          // Cетим в стейт галерею, попередню плюс нову
           this.setState(prevState => {
             return { gallery: prevState.gallery.concat(data.hits) };
           });
@@ -47,7 +53,10 @@ export class App extends Component {
       } catch (error) {
         this.setState({ error });
       } finally {
-        this.setState({ isLoading: false });
+        setTimeout(() => {
+          this.setState({ isLoading: false });
+        }, 2000);
+        // this.setState({ isLoading: false });
       }
     }
   }
@@ -88,12 +97,13 @@ export class App extends Component {
 
   render() {
     const { toggleModal, openModal } = this;
-    const { gallery, isLoading, showModal, largeImage } = this.state;
+    const { gallery, isLoading, showModal, largeImage, showLoadMore } =
+      this.state;
     return (
       <>
         <Div>
           <Searchbar onSubmit={this.onSearchValue} />
-          {isLoading && <Spiner />}
+
           <ImageGallery gallery={gallery} openModal={openModal} />
           {showModal && (
             <Modal toggleModal={toggleModal} largeImage={largeImage} />
@@ -103,7 +113,10 @@ export class App extends Component {
             position="top-left"
             theme="colored"
           />
-          {gallery.length >= 12 && <LoadeMore loadMore={this.loadMore} />}
+          <div>
+            {isLoading && <Spiner />}
+            {showLoadMore && <LoadeMore loadMore={this.loadMore} />}
+          </div>
         </Div>
       </>
     );
