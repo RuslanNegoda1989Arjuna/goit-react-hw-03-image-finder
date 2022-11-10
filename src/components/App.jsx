@@ -43,7 +43,7 @@ export class App extends Component {
 
           // Логіка відображення кнопки "Завантажити ще.."
           const show = Math.ceil(data.total / 12);
-          this.setState({ showLoadMore: page < show ? true : false });
+          this.setState({ showLoadMore: page < show });
 
           // Cетим в стейт галерею, попередню плюс нову
           this.setState(prevState => {
@@ -53,10 +53,7 @@ export class App extends Component {
       } catch (error) {
         this.setState({ error });
       } finally {
-        setTimeout(() => {
-          this.setState({ isLoading: false });
-        }, 2000);
-        // this.setState({ isLoading: false });
+        this.setState({ isLoading: false });
       }
     }
   }
