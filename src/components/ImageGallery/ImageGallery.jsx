@@ -4,14 +4,13 @@ export const ImageGallery = ({ gallery, openModal }) => {
   return (
     <>
       <Gallery>
-        {gallery.map(({ id, webformatURL }, index) => {
+        {gallery.map(({ id, webformatURL, largeImageURL }) => {
           return (
             <ImageGalleryItem
               key={id}
               smallImg={webformatURL}
               id={id}
-              index={index}
-              openModal={openModal}
+              openModal={() => openModal(largeImageURL)}
             />
           );
         })}
