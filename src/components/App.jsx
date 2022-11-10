@@ -87,12 +87,6 @@ export class App extends Component {
       largeImage: largeImageURL,
     });
   };
-  // openModal = index => {
-  //   this.setState(({ gallery }) => ({
-  //     showModal: true,
-  //     largeImage: gallery[index].largeImageURL,
-  //   }));
-  // };
 
   toggleModal = () => {
     this.setState(({ showModal }) => ({ showModal: !showModal }));
